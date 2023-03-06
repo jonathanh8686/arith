@@ -1,24 +1,17 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import { TitleScreen } from './components/Title/TitleScreen';
+import { Difficulty } from './difficulty';
 
-function App() {
+const App = () => {
+
+  const [diff, setDiff] = useState(Difficulty.Medium);
+
+  
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="text-center p-5">
+      <TitleScreen diff={diff} setDiff={setDiff}></TitleScreen>
     </div>
   );
 }
