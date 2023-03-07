@@ -81,7 +81,6 @@ export const TimingDisplay = (props: PropType) => {
             },
         ],
     };
-    console.log(data)
 
     return (
         <>

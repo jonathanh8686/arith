@@ -28,8 +28,8 @@ const generateAddition = (difficulty: Difficulty): QuestionData => {
         upperBound = 100
     }
     else if (difficulty === Difficulty.Hard) {
-        lowerBound = -1000
-        upperBound = 10000
+        lowerBound = -100
+        upperBound = 1000
     }
 
     if (lowerBound === undefined || upperBound === undefined) {
@@ -70,11 +70,11 @@ const generateSubtraction = (difficulty: Difficulty): QuestionData => {
         flippedProbability = 0.25
     }
     else if (difficulty === Difficulty.Hard) {
-        firstUpper = -1000
-        firstLower = 10000
+        firstUpper = -100
+        firstLower = 1000
 
-        secondUpper = -1000
-        secondLower = 10000
+        secondUpper = -100
+        secondLower = 1000
 
         flippedProbability = 0.5
     }
@@ -110,8 +110,8 @@ const generateMultiplication = (difficulty: Difficulty): QuestionData => {
         upperBound = 20
     }
     else if (difficulty === Difficulty.Hard) {
-        lowerBound = -100
-        upperBound = 1000
+        lowerBound = -30
+        upperBound = 100
     }
 
     if (lowerBound === undefined || upperBound === undefined) {
@@ -133,24 +133,24 @@ const generateDivision = (difficulty: Difficulty): QuestionData => {
 
     if (difficulty === Difficulty.Easy) {
         firstUpper = 0
-        firstLower = 50
+        firstLower = 15
 
         answerUpper = 1
         answerLower = 10
     }
     else if (difficulty === Difficulty.Medium) {
         firstUpper = 0
-        firstLower = 100
+        firstLower = 30
 
         answerUpper = 1
         answerLower = 10
     }
     else if (difficulty === Difficulty.Hard) {
-        firstUpper = -1000
-        firstLower = 10000
+        firstUpper = -50
+        firstLower = 100
 
         answerUpper = 1
-        answerLower = 10
+        answerLower = 20
     }
 
     if (firstUpper === undefined || firstLower === undefined || answerUpper === undefined || answerLower === undefined)
@@ -170,7 +170,6 @@ const generateDivision = (difficulty: Difficulty): QuestionData => {
         answer: answer
     }
 }
-
 
 export const generateQuestion = (difficulty: Difficulty): QuestionData => {
     let selectedOperation: Operation = Math.floor(Math.random() * 4)

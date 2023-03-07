@@ -1,9 +1,10 @@
 import { generateQuestion } from '../../oracle'
 import { Difficulty } from "../../difficulty"
 import { Question } from './Question'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useTimer } from 'react-timer-hook';
 import { QATiming, Statistics } from '../../statistics';
+import FadeIn from 'react-fade-in/lib/FadeIn';
 
 interface PropType {
     diff: Difficulty
@@ -15,6 +16,7 @@ export const Game = (props: PropType) => {
     const [currQuestion, setCurrQuestion] = useState(generateQuestion(props.diff));
     const [guess, setGuess] = useState("");
     const [score, setScore] = useState(0);
+    const [skips, setSkips] = useState(3);
     const [questionDisplayed, setQuestionDisplay] = useState(new Date().getTime());
 
     const [timings, setTimings] = useState<QATiming[]>([]);
@@ -24,6 +26,8 @@ export const Game = (props: PropType) => {
     const nextQuestion = () => {
         setCurrQuestion(generateQuestion(props.diff))
     }
+
+    const nextQuestionCB = useCallback(nextQuestion, [props.diff])
 
     useEffect(() => {
         if (guess === currQuestion.answer.toString()) {
@@ -35,11 +39,11 @@ export const Game = (props: PropType) => {
 
             setQuestionDisplay(new Date().getTime());
 
-            nextQuestion();
+            nextQuestionCB();
             setGuess("");
             setScore(score + 1);
         }
-    }, [guess])
+    }, [guess, currQuestion, questionDisplayed, score, timings, nextQuestionCB])
 
     const currentTime = new Date();
     currentTime.setSeconds(currentTime.getSeconds() + totalSeconds)
@@ -56,6 +60,13 @@ export const Game = (props: PropType) => {
         }
     });
 
+    const handleKeyPress = (key: string) => {
+        if (key === "Enter" && skips > 0) {
+            nextQuestion()
+            setSkips(skips => skips - 1);
+        }
+    }
+
     return (
         <>
             <div className="pointer-events-none absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-10 text-massive text-cyan-600">
@@ -65,13 +76,21 @@ export const Game = (props: PropType) => {
                 <Question key={score} {...currQuestion}></Question>
                 <div>
                     <input type="text" value={guess} className="border-2 border-black text-5xl px-5 py-2 w-96 h-24"
-                        onChange={(e) => setGuess(e.target.value)}></input>
+                        onChange={(e) => setGuess(e.target.value)}
+                        onKeyDown={(e) => { handleKeyPress(e.key) }}></input>
+                    <div>
+                        Skips remaining: {skips}
+                        <span className={`px-5 text-xs transition duration-500 ${skips !== 3 ? "opacity-0" : "opacity-100"}`}>
+                        <FadeIn>
+                            Press ENTER to skip...
+                        </FadeIn>
+                        </span>
+                    </div>
                 </div>
             </div>
-            <span  style={{transform: `translateX(${100*((seconds==0?totalSeconds:(seconds-1))/(totalSeconds-1)) - 100}%)`}}
-                className={"transition duration-1000 ease-linear absolute " + (seconds >= totalSeconds/2 ? "bg-green-400": (seconds >= totalSeconds/ 4? "bg-yellow-400" : "bg-red-400")) + " h-1 bottom-0 w-full"}>
+            <span style={{ transform: `translateX(${100 * ((seconds === 0 ? totalSeconds : (seconds - 1)) / (totalSeconds - 1)) - 100}%)` }}
+                className={"transition duration-1000 ease-linear absolute " + (seconds >= totalSeconds / 2 ? "bg-green-400" : (seconds >= totalSeconds / 4 ? "bg-yellow-400" : "bg-red-400")) + " h-1 bottom-0 w-full"}>
             </span>
         </>
     )
-
 }
