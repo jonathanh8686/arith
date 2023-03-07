@@ -62,7 +62,7 @@ export const Game = (props: PropType) => {
                 {score}
             </div>
             <div className='flex flex-col items-center justify-center h-screen'>
-                <Question {...currQuestion}></Question>
+                <Question key={score} {...currQuestion}></Question>
                 <div>
                     <input type="text" value={guess} className="border-2 border-black text-5xl px-5 py-2 w-96 h-24"
                         onChange={(e) => setGuess(e.target.value)}></input>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import FadeIn from "react-fade-in";
 
 export enum Operation {
     Add = 0,
@@ -36,9 +37,11 @@ export const Question = (questionData: QuestionData) => {
     }, [questionData])
     return (
         <>
+        <FadeIn delay={0}>
             <div className="flex text-8xl py-5">
                 {`${questionData.first} ${operationText} ${questionData.second}`}
             </div>
+        </FadeIn>
         </>
     )
 }
