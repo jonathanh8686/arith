@@ -19,6 +19,8 @@ export const Game = (props: PropType) => {
 
     const [timings, setTimings] = useState<QATiming[]>([]);
 
+    const totalSeconds = 30;
+
     const nextQuestion = () => {
         setCurrQuestion(generateQuestion(props.diff))
     }
@@ -26,10 +28,10 @@ export const Game = (props: PropType) => {
     useEffect(() => {
         if (guess === currQuestion.answer.toString()) {
             setTimings(timings.concat([
-            {
-                question: currQuestion,
-                delay: new Date().getTime() - questionDisplayed
-            }]));
+                {
+                    question: currQuestion,
+                    delay: new Date().getTime() - questionDisplayed
+                }]));
 
             setQuestionDisplay(new Date().getTime());
 
@@ -40,7 +42,7 @@ export const Game = (props: PropType) => {
     }, [guess])
 
     const currentTime = new Date();
-    currentTime.setSeconds(currentTime.getSeconds() + 10)
+    currentTime.setSeconds(currentTime.getSeconds() + totalSeconds)
 
     const {
         seconds
@@ -56,7 +58,6 @@ export const Game = (props: PropType) => {
 
     return (
         <>
-        <div className="text-2xl">{seconds}</div>
             <div className="pointer-events-none absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-10 text-massive text-cyan-600">
                 {score}
             </div>
@@ -66,8 +67,10 @@ export const Game = (props: PropType) => {
                     <input type="text" value={guess} className="border-2 border-black text-5xl px-5 py-2 w-96 h-24"
                         onChange={(e) => setGuess(e.target.value)}></input>
                 </div>
-
             </div>
+            <span  style={{transform: `translateX(${100*((seconds==0?totalSeconds:(seconds-1))/(totalSeconds-1)) - 100}%)`}}
+                className={"transition duration-1000 ease-linear absolute " + (seconds >= totalSeconds/2 ? "bg-green-400": (seconds >= totalSeconds/ 4? "bg-yellow-400" : "bg-red-400")) + " h-1 bottom-0 w-full"}>
+            </span>
         </>
     )
 

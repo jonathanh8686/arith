@@ -1,4 +1,5 @@
 import { Statistics } from "../../statistics"
+import { TimingDisplay } from "./TimingDisplay";
 
 interface PropType {
     stats: Statistics
@@ -7,7 +8,6 @@ interface PropType {
 }
 
 export const Results = (props: PropType) => {
-    console.log(props.stats)
     return (
         <>
             <div className="flex flex-col items-center justify-center h-screen">
@@ -15,15 +15,9 @@ export const Results = (props: PropType) => {
                     {"Score: " + props.stats.score}
                 </div>
 
-                {props.stats.story.map((timing) => {
-                    return (
-                        <div>
-                            {timing.delay}
-                        </div>
-                    )
-                })}
+                <TimingDisplay timings={props.stats.story}></TimingDisplay>
 
-                <div className="inline-flex my-10">
+                <div className="inline-flex my-10 border-2 border-gray-500 rounded-lg">
                     <button className="bg-cyan-300 hover:bg-blue-100 text-gray-800 font-bold py-2 px-4 rounded-l"
                         onClick={() => {props.showTitle()}}>
                         Return to Home

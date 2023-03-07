@@ -14,25 +14,25 @@ export interface QuestionData {
     answer: number
 }
 
+export const toReadableOperation = (o: Operation): string => {
+    switch (o) {
+        case Operation.Add:
+            return "+";
+        case Operation.Subtract:
+            return "-";
+        case Operation.Multiply:
+            return "×";
+        case Operation.Divide:
+            return "÷";
+    }
+}
+
 export const Question = (questionData: QuestionData) => {
 
     const [operationText, setOperationText] = useState("");
 
     useEffect(() => {
-        switch (questionData.operation) {
-            case Operation.Add:
-                setOperationText("+");
-                break;
-            case Operation.Subtract:
-                setOperationText("-");
-                break;
-            case Operation.Multiply:
-                setOperationText("×");
-                break;
-            case Operation.Divide:
-                setOperationText("÷");
-                break;
-        }
+        setOperationText(toReadableOperation(questionData.operation))
     }, [questionData])
     return (
         <>

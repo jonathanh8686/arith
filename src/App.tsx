@@ -31,10 +31,13 @@ const App = () => {
 
   return (
     <>
-    <div className="w-100 h-100">
+    <div className="flex justify-center flex-col w-100 h-100">
+      <div>
       {(gameState === GameState.Title) && <TitleScreen diff={diff} setDiff={setDiff} startGame={startGame}></TitleScreen>}
       {(gameState === GameState.Active) && <Game diff={diff} showResults={showResults} setStatistics={setStatistics}></Game>}
       {(gameState === GameState.Results) && <Results stats={statistics} showTitle={showTitle} startGame={startGame}></Results>}
+
+      </div>
     </div>
     </>
   );
