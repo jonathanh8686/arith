@@ -51,6 +51,8 @@ export const TitleScreen = (props: PropType) => {
 
                 </FadeIn>
             </div>
+
+            <span className="text-xs absolute bottom-1 w-screen text-center">created by: <a className="text-cyan-700" href="https://jonathanhsieh.dev">jonathan hsieh</a></span>
         </>
     )
 }

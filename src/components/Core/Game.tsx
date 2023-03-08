@@ -1,6 +1,6 @@
-import { generateQuestion } from '../../oracle'
+import { generateQuestion } from '../../generators/oracle'
 import { Difficulty } from "../../difficulty"
-import { Question } from './Question'
+import { Question, QuestionData } from './Question'
 import { useCallback, useEffect, useState } from 'react'
 import { useTimer } from 'react-timer-hook';
 import { QATiming, Statistics } from '../../statistics';
@@ -13,7 +13,9 @@ interface PropType {
 }
 
 export const Game = (props: PropType) => {
-    const [currQuestion, setCurrQuestion] = useState(generateQuestion(props.diff));
+    const [currQuestion, setCurrQuestion] = useState<QuestionData>(() => {
+        return generateQuestion(props.diff)
+    });
     const [guess, setGuess] = useState("");
     const [score, setScore] = useState(0);
     const [skips, setSkips] = useState(3);
@@ -25,6 +27,8 @@ export const Game = (props: PropType) => {
 
     const nextQuestion = () => {
         setCurrQuestion(generateQuestion(props.diff))
+        setQuestionDisplay(new Date().getTime());
+        setGuess("");
     }
 
     const nextQuestionCB = useCallback(nextQuestion, [props.diff])
@@ -36,11 +40,7 @@ export const Game = (props: PropType) => {
                     question: currQuestion,
                     delay: new Date().getTime() - questionDisplayed
                 }]));
-
-            setQuestionDisplay(new Date().getTime());
-
             nextQuestionCB();
-            setGuess("");
             setScore(score + 1);
         }
     }, [guess, currQuestion, questionDisplayed, score, timings, nextQuestionCB])
@@ -81,9 +81,9 @@ export const Game = (props: PropType) => {
                     <div>
                         Skips remaining: {skips}
                         <span className={`px-5 text-xs transition duration-500 ${skips !== 3 ? "opacity-0" : "opacity-100"}`}>
-                        <FadeIn>
-                            Press ENTER to skip...
-                        </FadeIn>
+                            <FadeIn>
+                                Press ENTER to skip...
+                            </FadeIn>
                         </span>
                     </div>
                 </div>
