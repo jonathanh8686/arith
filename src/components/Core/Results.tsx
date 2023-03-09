@@ -1,4 +1,5 @@
 import { Statistics } from "../../statistics"
+import { AbilityRadar } from "./AbilityRadar";
 import { TimingDisplay } from "./TimingDisplay";
 
 interface PropType {
@@ -16,6 +17,8 @@ export const Results = (props: PropType) => {
                 </div>
 
                 <TimingDisplay timings={props.stats.story}></TimingDisplay>
+
+                <AbilityRadar></AbilityRadar>
 
                 <div className="inline-flex my-10 border-2 border-gray-500 rounded-lg">
                     <button className="bg-cyan-300 hover:bg-blue-100 text-gray-800 font-bold py-2 px-4 rounded-l"
