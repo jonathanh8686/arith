@@ -33,8 +33,8 @@ const options = {
         },
         tooltip: {
             callbacks: {
-                label: (context:any) => {
-                        return context.parsed.y + " seconds";
+                label: (context: any) => {
+                    return context.parsed.y + " seconds";
                 }
             }
         }
@@ -74,10 +74,11 @@ export const TimingDisplay = (props: PropType) => {
             {
                 data: props.timings.map((timing, index) => { return { x: index, y: timing.delay / 1000 } }),
                 backgroundColor: props.timings.map((timing) => {
-
-                    return `rgba(${Math.pow(timing.delay, 1)/10}, 150, 180, 1)`
-                })
-                // backgroundColor: 'rgba(255, 99, 132)',
+                    return `rgba(${Math.pow(timing.delay, 1) / 10}, 150, 180, 0.7)`
+                }),
+                borderWidth: 2,
+                borderRadius: 9,
+                borderSkipped: false,
             },
         ],
     };
