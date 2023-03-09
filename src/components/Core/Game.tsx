@@ -1,7 +1,7 @@
 import { generateQuestion } from '../../generators/oracle'
 import { Difficulty } from "../../difficulty"
 import { Question, QuestionData } from './Question'
-import { useCallback, useEffect, useState } from 'react'
+import { KeyboardEvent, useCallback, useEffect, useState } from 'react'
 import { useTimer } from 'react-timer-hook';
 import { QATiming, Statistics } from '../../statistics';
 import FadeIn from 'react-fade-in/lib/FadeIn';
@@ -9,6 +9,8 @@ import FadeIn from 'react-fade-in/lib/FadeIn';
 interface PropType {
     diff: Difficulty
     showResults: () => void,
+    returnToTitle: () => void,
+    restartGame: () => void,
     setStatistics: (statistics: Statistics) => void;
 }
 
@@ -60,24 +62,41 @@ export const Game = (props: PropType) => {
         }
     });
 
-    const handleKeyPress = (key: string) => {
-        if (key === "Enter" && skips > 0) {
+    const handleKeyPress = (e: KeyboardEvent) => {
+        if (e.key === "Enter" && skips > 0) {
             nextQuestion()
             setSkips(skips => skips - 1);
+        }
+        if (e.key === "Escape") {
+            props.returnToTitle()
+        }
+        if (e.key === "r") {
+            props.restartGame()
+            e.preventDefault()
         }
     }
 
     return (
         <>
+            <FadeIn>
+                <div className={"transition duration-500 ease-in pointer-events-none absolute top-1 left-1 transform text-xs " + (score === 0 ? "opacity-100" : "opacity-0")}>
+                    press "escape" to go back to home
+                </div>
+
+                <div className={"transition duration-500 ease-in pointer-events-none absolute top-1 right-1 transform text-xs " + (score === 0 ? "opacity-100" : "opacity-0")}>
+                    or "r" to restart
+                </div>
+            </FadeIn>
+
             <div className="pointer-events-none absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-10 text-massive text-cyan-600">
                 {score}
             </div>
             <div className='flex flex-col items-center justify-center h-screen'>
                 <Question key={score} {...currQuestion}></Question>
                 <div>
-                    <input type="text" value={guess} className="border-2 border-black text-5xl px-5 py-2 w-96 h-24"
+                    <input autoFocus type="text" value={guess} className="border-2 border-black text-5xl px-5 py-2 w-96 h-24"
                         onChange={(e) => setGuess(e.target.value)}
-                        onKeyDown={(e) => { handleKeyPress(e.key) }}></input>
+                        onKeyDown={(e) => { handleKeyPress(e) }}></input>
                     <div>
                         Skips remaining: {skips}
                         <span className={`px-5 text-xs transition duration-500 ${skips !== 3 ? "opacity-0" : "opacity-100"}`}>
